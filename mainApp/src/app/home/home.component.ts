@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from '../http.service';
+import { MessageService } from '../message.service';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +13,7 @@ export class HomeComponent implements OnInit {
   authors: any = [];
   oneAuthor = {name: ""};
 
-  constructor(private _route: Router, private _httpService: HttpService) { }
+  constructor(private _route: Router, private _httpService: HttpService, private messageService: MessageService) { }
 
   ngOnInit() {
     this.getAuthorsFromService();
@@ -28,9 +29,18 @@ export class HomeComponent implements OnInit {
   deleteAuthor(id){
     console.log(id)
     this._httpService.deleteSingleAuthor(id)
-    .subscribe((responseData)=>{
-      console.log(responseData)
-      this._route.navigate(['/home']);   
+    .subscribe((responseData:any)=>{
+      if(responseData.error) {
+        var messageString = responseData.error.message
+        this.messageService.add("Delete error: " + messageString);
+        // this._route.navigate(['/home']);
+      } else {
+        this.messageService.add("Author deleted.");
+        this.getAuthorsFromService();
+        // this._route.navigate(['/home']);
+      }
+
+      
     })
   }
 

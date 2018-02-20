@@ -10,10 +10,6 @@ var bodyParser = require( 'body-parser' );
 app.use(bodyParser.json());
 app.use(express.static( __dirname + '/mainApp/dist'));
 
-// app.all('*', (req, res, next) => {
-//     res.sendFile(path.resolve( __dirname + '/mainApp/dist/index.html'));
-// })
-
 //Mongoose/MongoDB
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/mean_authors_api');
@@ -58,16 +54,16 @@ app.post('/api/new', function(req, res){
             console.log('Error while adding author');
             res.json({message: "Error", error: err});
         } else {
-            res.redirect('/api/authors');
+            res.json({message: "Successfully added"});
         };
     });
 });
 
 //Update author by ID
 app.put('/api/edit/:id', function(req, res){
-    Author.update({_id: req.params.id}, req.body, function(err){
+    Author.update({_id: req.params.id}, req.body, {runValidators: true}, function(err){
         if(err){
-            console.log("Error updating: " + err);
+            // console.log("Error updating: " + err);
             res.json({message: "Error", error: err});
         } else {
             res.json({message: "Successfully updated"});
@@ -82,10 +78,14 @@ app.delete('/api/edit/:id', function(req, res){
             console.log('Error when deleteing from mongo' + err);
             res.json({message: "Error", error: err});
         } else {
-            res.redirect({message: "Success deleted"});
+            res.json({message: "Success deleted"});
         };
     });
 });
+
+app.all('*', (req, res, next) => {
+    res.sendFile(path.resolve( __dirname + '/mainApp/dist/index.html'));
+})
 
 //Listen to server
 app.listen(4300, function(){

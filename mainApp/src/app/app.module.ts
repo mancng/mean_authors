@@ -11,6 +11,8 @@ import { ShowAllComponent } from './show-all/show-all.component';
 import { EditComponent } from './edit/edit.component';
 import { AddComponent } from './add/add.component';
 import { HomeComponent } from './home/home.component';
+import { MessagesComponent } from './messages/messages.component';
+import { MessageService } from './message.service';
 
 
 @NgModule({
@@ -19,7 +21,8 @@ import { HomeComponent } from './home/home.component';
     ShowAllComponent,
     EditComponent,
     AddComponent,
-    HomeComponent
+    HomeComponent,
+    MessagesComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +30,7 @@ import { HomeComponent } from './home/home.component';
     FormsModule,
     HttpClientModule
   ],
-  providers: [HttpService],
+  providers: [HttpService, MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

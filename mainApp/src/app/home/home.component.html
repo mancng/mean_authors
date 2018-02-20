@@ -10,13 +10,9 @@
   </tr>
   <tr *ngFor="let x of authors">
     <td>{{x.name}}</td>
-    <td><a [routerLink]="['/edit', x._id]">Edit</a> | 
-      <a (click)="deleteAuthor(x._id)">Delete</a></td>
+    <td><button [routerLink]="['/edit', x._id]">Edit</button> <button (click)= "deleteAuthor(x._id)">Delete</button></td>
+
   </tr>
 </table>
 
-<router-outlet></router-outlet>
-
-
-<!-- <a [routerLink]="['/delete', x._id]">Delete</a> -->
-<!-- <a (click)="deleteAuthor(x._id)">Delete</a> -->
+<!-- <router-outlet></router-outlet> -->

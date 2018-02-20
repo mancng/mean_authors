@@ -1,10 +1,10 @@
 <a [routerLink]="['/']">Home</a>
-<h4>Edit author:</h4>
+<h4>Edit this author:</h4>
 <div id="border">
   <form (submit)="onSubmit()">
     <span>Name:</span><br>
     <input id="textField" type="text" name="authorName" [(ngModel)]="authorName" /><br>
     <a id="cancelBtn" [routerLink]="['/home']">Cancel</a>
-    <input type="submit" value="Edit Author"/>
+    <input type="submit" value="Submit"/>
   </form>
 </div>

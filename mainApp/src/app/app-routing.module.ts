@@ -5,11 +5,10 @@ import { EditComponent } from './edit/edit.component';
 import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent},
+  { path: '', component: HomeComponent},
   { path: 'add', component: AddComponent },
   { path: 'edit/:id', component: EditComponent },
-  { path: 'delete/:id', redirectTo: '/home' },
-  { path: '', pathMatch: 'full', redirectTo: '/home' }
+  { path: 'delete/:id', redirectTo: '/home' }
 ];
 
 @NgModule({
