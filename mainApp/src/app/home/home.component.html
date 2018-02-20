@@ -1,17 +1,22 @@
 
-<a [routerLink]="['add']">Add an author</a>
+<a [routerLink]="['/add']">Add an author</a>
 
-<p>We have quotes by:</p>
+<h4>We have quotes by:</h4>
 
 <table>
   <tr>
     <th>Author</th>
     <th>Actions available</th>
   </tr>
-  <tr>
-    <td>Name</td>
-    <td><a href="">Edit</a> | <a href="">Delete</a></td>
+  <tr *ngFor="let x of authors">
+    <td>{{x.name}}</td>
+    <td><a [routerLink]="['/edit', x._id]">Edit</a> | 
+      <a (click)="deleteAuthor(x._id)">Delete</a></td>
   </tr>
 </table>
 
 <router-outlet></router-outlet>
+
+
+<!-- <a [routerLink]="['/delete', x._id]">Delete</a> -->
+<!-- <a (click)="deleteAuthor(x._id)">Delete</a> -->

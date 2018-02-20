@@ -1,0 +1,29 @@
+#border{
+    padding: 20px;
+    border: 1px solid black;
+    width: 300px;
+}
+
+#cancelBtn{
+    border: 1px solid black;
+    font-size: 9pt;
+    text-decoration: none;
+    border-radius: 5px;
+    padding: 1px 10px;
+    color: black;
+    font-family: sans-serif;
+    margin-right: 5px;
+}
+
+input[type=submit]{
+    border: 1px solid black;
+    border-radius: 5px;
+    font-family: sans-serif;
+    padding: 1px 10px;
+    font-size: 9pt;
+}
+
+#textField{
+    margin-top: 8px;
+    margin-bottom: 10px;
+}

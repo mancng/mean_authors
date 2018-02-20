@@ -1,6 +1,7 @@
 //Require Express
 var express = require( 'express' );
 var app = express();
+var path = require( 'path' );
 
 //Get body-parser
 var bodyParser = require( 'body-parser' );
@@ -8,6 +9,10 @@ var bodyParser = require( 'body-parser' );
 //Other server configs
 app.use(bodyParser.json());
 app.use(express.static( __dirname + '/mainApp/dist'));
+
+// app.all('*', (req, res, next) => {
+//     res.sendFile(path.resolve( __dirname + '/mainApp/dist/index.html'));
+// })
 
 //Mongoose/MongoDB
 var mongoose = require('mongoose');
@@ -21,7 +26,7 @@ mongoose.Promise = global.Promise;
 
 //Routes
 //Get all authors
-app.get('/', function(req, res){
+app.get('/api/authors', function(req, res){
     Author.find({}, function(err, author){
         if(err){
             console.log("Error from pulling all Authors", err);
@@ -33,8 +38,8 @@ app.get('/', function(req, res){
 });
 
 //Retrieve an author by ID
-app.get('/edit/:id', function(req, res){
-    Author.findOne({_id: req.params.id}, function(err, error){
+app.get('/api/edit/:id', function(req, res){
+    Author.findOne({_id: req.params.id}, function(err, author){
         if(err){
             console.log("Error getting the author from mongo");
             res.json({message: "Error", error: err});
@@ -45,7 +50,7 @@ app.get('/edit/:id', function(req, res){
 });
 
 //Create an author
-app.post('/new', function(req, res){
+app.post('/api/new', function(req, res){
     var author = new Author(req.body);
 
     author.save(function(err){
@@ -53,31 +58,31 @@ app.post('/new', function(req, res){
             console.log('Error while adding author');
             res.json({message: "Error", error: err});
         } else {
-            res.redirect('/');
+            res.redirect('/api/authors');
         };
     });
 });
 
 //Update author by ID
-app.put('/edit/:id', function(req, res){
+app.put('/api/edit/:id', function(req, res){
     Author.update({_id: req.params.id}, req.body, function(err){
         if(err){
             console.log("Error updating: " + err);
             res.json({message: "Error", error: err});
         } else {
-            res.redirect('/');
+            res.json({message: "Successfully updated"});
         };
     });
 });
 
 //Delete the author by ID
-app.delete('/edit/:id', function(req, res){
-    Author.remove({_id: req.params.id}, function(err, task){
+app.delete('/api/edit/:id', function(req, res){
+    Author.remove({_id: req.params.id}, function(err){
         if(err){
-            console.log('Error when deleteing from mongo');
+            console.log('Error when deleteing from mongo' + err);
             res.json({message: "Error", error: err});
         } else {
-            res.redirect('/');
+            res.redirect({message: "Success deleted"});
         };
     });
 });

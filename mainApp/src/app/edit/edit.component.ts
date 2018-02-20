@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpService } from '../http.service';
 
 @Component({
   selector: 'app-edit',
@@ -7,9 +9,30 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EditComponent implements OnInit {
 
-  constructor() { }
+  authorToEdit: any = {_id: "", name: "", createdAt: "", updatedAt: ""};
+  authorName: string;
+  authorId: string;
+
+  constructor(private _route: ActivatedRoute, private _httpService: HttpService, private _router: Router) { }
 
   ngOnInit() {
+    this._route.paramMap.subscribe((params) =>{
+      this._httpService.getSingleAuthor(params.get('id'))
+      .subscribe((responseData)=>{
+        this.authorToEdit = responseData;
+        this.authorName = this.authorToEdit.name;
+        this.authorId = this.authorToEdit._id;
+      })
+    })
+  }
+
+  onSubmit(){
+    var toEdit = {name: this.authorName}
+    this._httpService.updateSingleAuthor(this.authorId, toEdit)
+    .subscribe((responseData)=>{
+      console.log(responseData)
+      this._router.navigate(['/home']);
+    })
   }
 
 }
