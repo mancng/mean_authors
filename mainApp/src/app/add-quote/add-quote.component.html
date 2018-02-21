@@ -1,9 +1,9 @@
 <a [routerLink]="['/']">Home</a>
-<h4>Add a new quotable author:</h4>
+<h4>Provide a quote by {{authorName}}:</h4>
 <div id="border">
-  <form (submit)="addTask()">
-    <span>Name:</span><br>
-    <input id="textField" type="text" name="authorName" [(ngModel)]="authorName"/><br>
+  <form (submit)="addQuote()">
+    <span>Quote:</span><br>
+    <input id="textField" type="text" name="authorName" [(ngModel)]="newQuote"/><br>
     <a id="cancelBtn" [routerLink]="['/']">Cancel</a>
     <input type="submit" value="Submit"/>
   </form>

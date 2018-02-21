@@ -14,7 +14,11 @@ app.use(express.static( __dirname + '/mainApp/dist'));
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/mean_authors_api');
 var authorSchema = new mongoose.Schema({
-    name: { type: String, required: true, minlength: 3 }
+    name: { type: String, required: true, minlength: 3 },
+    quotes: [
+        {content: {type: String, minlength: 3 }, 
+         votes: {type: Number, default: 0}}
+    ]
 }, {timestamps: true});
 mongoose.model('Author', authorSchema);
 var Author = mongoose.model('Author');
@@ -29,9 +33,9 @@ app.get('/api/authors', function(req, res){
             res.json({message: "Error", error: err});
         } else {
             res.json(author);
-        };
-    });
-});
+        }
+    })
+})
 
 //Retrieve an author by ID
 app.get('/api/edit/:id', function(req, res){
@@ -41,9 +45,9 @@ app.get('/api/edit/:id', function(req, res){
             res.json({message: "Error", error: err});
         } else {
             res.json(author);
-        };
-    });
-});
+        }
+    })
+})
 
 //Create an author
 app.post('/api/new', function(req, res){
@@ -55,9 +59,9 @@ app.post('/api/new', function(req, res){
             res.json({message: "Error", error: err});
         } else {
             res.json({message: "Successfully added"});
-        };
-    });
-});
+        }
+    })
+})
 
 //Update author by ID
 app.put('/api/edit/:id', function(req, res){
@@ -67,9 +71,78 @@ app.put('/api/edit/:id', function(req, res){
             res.json({message: "Error", error: err});
         } else {
             res.json({message: "Successfully updated"});
-        };
-    });
-});
+        }
+    })
+})
+
+//Add a quote by author ID
+app.put('/api/write/:id', function(req, res){
+    Author.update({_id: req.params.id}, {$push:req.body}, {runValidators: true}, function(err){
+        if(err){
+            console.log("Error adding quote" + err);
+            res.json({message: "Error", error: err});
+        } else {
+            res.json({message: "Successfully adding a quote"});
+        }
+    })
+})
+
+//Increment a vote on one quote
+app.put('/api/write/:id/voteup', function(req, res){
+    Author.findOne({_id: req.params.id}, function(err, author){
+        if(err){
+            res.json({message: "Error", error: err});
+        } else {
+            // console.log(author.quotes)
+            for( i = 0; i < author.quotes.length; i++){
+                var loopID = author.quotes[i]._id;
+                console.log("LoopID: " + loopID)
+                console.log("sent quote ID: " + req.body)
+                if(author.quotes[i]._id == String(req.body)) {
+                    console.log("MATCHED!")
+                    Author.update({_id: loopId}, {$inc: {votes: +1}}, function(err){
+                        if(err){
+                            console.log("Error when incrementing vote" + err);
+                            res.json({message: "Error", error: err});
+                        } else {
+                            res.json({message: "Sucessfully incremented a vote"});
+                        }
+                    })
+                } else {
+                    console.log("NO MATCHING QUOTE FOUND");
+                }
+            }
+        }
+    })
+})
+
+
+//Decrement a vote on one quote
+app.put('/api/write/:id/votedown', function(req, res){
+    Author.findOne({_id: req.params.id}, function(err, author){
+        if(err){
+            res.json({message: "Error", error: err});
+        } else {
+            // console.log(author.quotes)
+            for( i = 0; i < author.quotes.length; i++){
+                var loopID = author.quotes[i]._id;
+                if(loopID == String(req.body)) {
+                    console.log("MATCHED!")
+                    Author.update({_id: loopId}, {$inc: {votes: -1}}, function(err){
+                        if(err){
+                            console.log("Error when incrementing vote" + err);
+                            res.json({message: "Error", error: err});
+                        } else {
+                            res.json({message: "Sucessfully incremented a vote"});
+                        }
+                    })
+                } else {
+                    console.log("NO MATCHING QUOTE FOUND");
+                }
+            }
+        }
+    })
+})
 
 //Delete the author by ID
 app.delete('/api/edit/:id', function(req, res){
@@ -79,9 +152,9 @@ app.delete('/api/edit/:id', function(req, res){
             res.json({message: "Error", error: err});
         } else {
             res.json({message: "Success deleted"});
-        };
-    });
-});
+        }
+    })
+})
 
 app.all('*', (req, res, next) => {
     res.sendFile(path.resolve( __dirname + '/mainApp/dist/index.html'));

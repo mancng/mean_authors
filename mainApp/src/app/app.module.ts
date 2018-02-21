@@ -13,6 +13,8 @@ import { AddComponent } from './add/add.component';
 import { HomeComponent } from './home/home.component';
 import { MessagesComponent } from './messages/messages.component';
 import { MessageService } from './message.service';
+import { QuotesComponent } from './quotes/quotes.component';
+import { AddQuoteComponent } from './add-quote/add-quote.component';
 
 
 @NgModule({
@@ -22,7 +24,9 @@ import { MessageService } from './message.service';
     EditComponent,
     AddComponent,
     HomeComponent,
-    MessagesComponent
+    MessagesComponent,
+    QuotesComponent,
+    AddQuoteComponent
   ],
   imports: [
     BrowserModule,

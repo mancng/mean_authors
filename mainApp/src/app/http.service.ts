@@ -27,6 +27,17 @@ export class HttpService {
     return this._http.delete(`/api/edit/${id}`);
   }
 
+  addQuoteByAuthorId(id, newQuote){
+    return this._http.put(`/api/write/${id}`, newQuote);
+  }
+
+  incrementVote(authorId, quoteIdObj){
+    return this._http.put(`/api/write/${authorId}/voteup`, quoteIdObj);
+  }
+
+  decrementVote(authorId, quoteIdObj){
+    return this._http.put(`/api/write/${authorId}/votedown`, quoteIdObj);
+  }
 
 
 

@@ -12,8 +12,9 @@ export class AddComponent implements OnInit {
 
   authorName: string;
   newAuthor = {name: ""};
+  errorMessage: string;
 
-  constructor(private _httpService: HttpService, private _router: Router, private messageService: MessageService) { }
+  constructor(private _httpService: HttpService, private _router: Router) { }
 
   ngOnInit() {
   }
@@ -22,10 +23,8 @@ export class AddComponent implements OnInit {
     this._httpService.createAuthor({name: this.authorName})
     .subscribe((responseData:any)=>{
       if(responseData.error){
-        this.messageService.add("Author's name must be more than 2 characters")
+        this.errorMessage = "Author's name must be more than 2 characters"
       } else {
-        console.log('success', responseData);
-        this.messageService.add("Author added");
         this._router.navigate(['/']);
       }
     })

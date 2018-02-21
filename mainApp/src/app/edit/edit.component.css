@@ -27,3 +27,7 @@ input[type=submit]{
     margin-top: 8px;
     margin-bottom: 10px;
 }
+
+#ptag{
+    color: red;
+}

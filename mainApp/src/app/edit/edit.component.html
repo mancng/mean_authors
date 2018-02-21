@@ -7,4 +7,7 @@
     <a id="cancelBtn" [routerLink]="['/home']">Cancel</a>
     <input type="submit" value="Submit"/>
   </form>
+  <p id="ptag" *ngIf="errorMessage != undefined">
+    {{errorMessage}}
+  </p>
 </div>

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from '../http.service';
-import { MessageService } from '../message.service';
 
 @Component({
   selector: 'app-edit',
@@ -10,11 +9,12 @@ import { MessageService } from '../message.service';
 })
 export class EditComponent implements OnInit {
 
-  authorToEdit: any = {_id: "", name: "", createdAt: "", updatedAt: ""};
+  authorToEdit: any = {_id: "", name: "", quotes: [], votes: 0, createdAt: "", updatedAt: ""};
   authorName: string;
   authorId: string;
+  errorMessage: string;
 
-  constructor(private _route: ActivatedRoute, private _httpService: HttpService, private _router: Router, private messageService: MessageService) { }
+  constructor(private _route: ActivatedRoute, private _httpService: HttpService, private _router: Router) { }
 
   ngOnInit() {
     this._route.paramMap.subscribe((params) =>{
@@ -32,7 +32,7 @@ export class EditComponent implements OnInit {
     this._httpService.updateSingleAuthor(this.authorId, toEdit)
     .subscribe((responseData:any)=>{
       if(responseData.error){
-        this.messageService.add("Error editing author")
+        this.errorMessage = responseData.error.message;
       } else {
         this._router.navigate(['/']);
       }
