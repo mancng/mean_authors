@@ -4,3 +4,31 @@ table, th, td {
     text-align: center;
     padding: 5px;
 }
+
+h3{
+    color: blue;
+}
+
+#names{
+    color: blue;
+}
+
+#header{
+    background-color: lightgrey;
+}
+
+#viewBtn{
+    background-color: darkslategray;
+    color: white;
+    border-radius: 8px;
+}
+
+#editBtn{
+    margin-left: 10px;
+    border-radius: 8px;
+}
+
+#editBtn, #viewBtn{
+    width: 100px;
+    height: 30px;
+}

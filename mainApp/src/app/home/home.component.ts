@@ -33,14 +33,10 @@ export class HomeComponent implements OnInit {
       if(responseData.error) {
         var messageString = responseData.error.message
         this.messageService.add("Delete error: " + messageString);
-        // this._route.navigate(['/home']);
       } else {
         this.messageService.add("Author deleted.");
         this.getAuthorsFromService();
-        // this._route.navigate(['/home']);
       }
-
-      
     })
   }
 

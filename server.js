@@ -87,6 +87,28 @@ app.put('/api/write/:id', function(req, res){
     })
 })
 
+//Delete a quote by author ID
+app.put('/api/write/:id/delete', function(req, res){
+    Author.findOne({_id: req.params.id}, function(err, author){
+        if(err){
+            res.json({message: "Error", error: err});
+        } else {
+            for( i = 0; i < author.quotes.length; i++){
+                if(author.quotes[i]._id == String(req.body.quoteId)){
+                    author.quotes.splice(i, 1);
+                    author.save(function(err){
+                        if(err){
+                            res.json({message: "Error", error: err});
+                        } else {
+                            res.json({message: 'Successfully deleted quote'})
+                        }
+                    })
+                }
+            }
+        }
+    })
+})
+
 //Increment a vote on one quote
 app.put('/api/write/:id/voteup', function(req, res){
     Author.findOne({_id: req.params.id}, function(err, author){
@@ -95,21 +117,16 @@ app.put('/api/write/:id/voteup', function(req, res){
         } else {
             // console.log(author.quotes)
             for( i = 0; i < author.quotes.length; i++){
-                var loopID = author.quotes[i]._id;
-                console.log("LoopID: " + loopID)
-                console.log("sent quote ID: " + req.body)
-                if(author.quotes[i]._id == String(req.body)) {
+                if(author.quotes[i]._id == String(req.body.quoteId)) {
                     console.log("MATCHED!")
-                    Author.update({_id: loopId}, {$inc: {votes: +1}}, function(err){
+                    author.quotes[i].votes++;
+                    author.save(function(err){
                         if(err){
-                            console.log("Error when incrementing vote" + err);
                             res.json({message: "Error", error: err});
                         } else {
-                            res.json({message: "Sucessfully incremented a vote"});
+                            res.json({message: 'Successfully upvoted'})
                         }
                     })
-                } else {
-                    console.log("NO MATCHING QUOTE FOUND");
                 }
             }
         }
@@ -125,15 +142,15 @@ app.put('/api/write/:id/votedown', function(req, res){
         } else {
             // console.log(author.quotes)
             for( i = 0; i < author.quotes.length; i++){
-                var loopID = author.quotes[i]._id;
-                if(loopID == String(req.body)) {
+                if(author.quotes[i]._id == String(req.body.quoteId)) {
                     console.log("MATCHED!")
-                    Author.update({_id: loopId}, {$inc: {votes: -1}}, function(err){
+                    author.quotes[i].votes--;
+                    author.save( function(err){
                         if(err){
-                            console.log("Error when incrementing vote" + err);
+                            console.log("Error when down voting" + err);
                             res.json({message: "Error", error: err});
                         } else {
-                            res.json({message: "Sucessfully incremented a vote"});
+                            res.json({message: "Sucessfully down voted"});
                         }
                     })
                 } else {

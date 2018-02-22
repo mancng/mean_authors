@@ -18,6 +18,10 @@ export class QuotesComponent implements OnInit {
   constructor(private _route: ActivatedRoute, private _router: Router, private _httpService: HttpService) { }
 
   ngOnInit() {
+    this.getData();
+  }
+
+  getData(){
     this._route.paramMap.subscribe((params)=>{
       this._httpService.getSingleAuthor(params.get('id'))
       .subscribe((responseData)=>{
@@ -32,12 +36,14 @@ export class QuotesComponent implements OnInit {
   upVote(id){
     console.log("Clicked UpVote")
     console.log(id)
-    this._httpService.incrementVote(this.authorId, {quoteID: id})
+    const quoteIdObj = {quoteId: id}
+    this._httpService.incrementVote(this.authorId, quoteIdObj)
     .subscribe((responseData:any)=>{
       if(responseData.error){
         this.errorMessage = responseData.error.message;
       } else {
-        console.log("VOTED?")
+        console.log("VOTED!")
+        this.getData();
       }
     })
   }
@@ -45,11 +51,31 @@ export class QuotesComponent implements OnInit {
   downVote(id){
     console.log("Clicked DownVote")
     console.log(id)
+    const quoteIdObj = {quoteId: id}
+    this._httpService.decrementVote(this.authorId, quoteIdObj)
+    .subscribe((responseData:any)=>{
+      if(responseData.error){
+        this.errorMessage = responseData.error.message;
+      } else {
+        console.log("Down VOTED!")
+        this.getData();
+      }
+    })
   }
 
   deleteQuote(id){
     console.log("Clicked Delete Quote")
     console.log(id)
+    const quoteIdObj = {quoteId: id}
+    this._httpService.deleteQuote(this.authorId, quoteIdObj)
+    .subscribe((responseData:any)=>{
+      if(responseData.error){
+        this.errorMessage = responseData.error.message;
+      } else {
+        console.log("Deleted!")
+        this.getData();
+      }
+    })
   }
 
 }

@@ -3,7 +3,31 @@ table, th, td {
     border-collapse: collapse;
     text-align: center;
  }
+
+ h3{
+    color: blue;
+}
+
  
  #quote_link{
      margin-left: 30px;
+ }
+
+ #downBtn, #delBtn{
+     margin-left: 10px;
+ }
+
+ #downBtn, #delBtn, #upBtn{
+     width: 100px;
+     height: 30px;
+     border-radius: 8px;
+ }
+
+ th, td{
+     /* height: 35px; */
+     padding: 5px;
+ }
+
+ #header{
+     background-color: lightgray;
  }

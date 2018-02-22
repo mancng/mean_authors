@@ -369,7 +369,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/edit/edit.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<a [routerLink]=\"['/']\">Home</a>\n<h4>Edit this author:</h4>\n<div id=\"border\">\n  <form (submit)=\"onSubmit()\">\n    <span>Name:</span><br>\n    <input id=\"textField\" type=\"text\" name=\"authorName\" [(ngModel)]=\"authorName\" /><br>\n    <a id=\"cancelBtn\" [routerLink]=\"['/home']\">Cancel</a>\n    <input type=\"submit\" value=\"Submit\"/>\n  </form>\n  <p id=\"ptag\" *ngIf=\"errorMessage != undefined\">\n    {{errorMessage}}\n  </p>\n</div>\n"
+module.exports = "<a [routerLink]=\"['/']\">Home</a>\n<h4>Edit this author:</h4>\n<div id=\"border\">\n  <form (submit)=\"onSubmit()\">\n    <span>Name:</span><br>\n    <input id=\"textField\" type=\"text\" name=\"authorName\" [(ngModel)]=\"authorName\" /><br>\n    <a id=\"cancelBtn\" [routerLink]=\"['/']\">Cancel</a>\n    <input type=\"submit\" value=\"Submit\"/>\n  </form>\n  <p id=\"ptag\" *ngIf=\"errorMessage != undefined\">\n    {{errorMessage}}\n  </p>\n</div>\n"
 
 /***/ }),
 
@@ -445,7 +445,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "table, th, td {\n    border: 1px solid black;\n    border-collapse: collapse;\n    text-align: center;\n    padding: 5px;\n}", ""]);
+exports.push([module.i, "table, th, td {\n    border: 1px solid black;\n    border-collapse: collapse;\n    text-align: center;\n    padding: 5px;\n}\n\nh3{\n    color: blue;\n}\n\n#names{\n    color: blue;\n}\n\n#header{\n    background-color: lightgrey;\n}\n\n#viewBtn{\n    background-color: darkslategray;\n    color: white;\n    border-radius: 8px;\n}\n\n#editBtn{\n    margin-left: 10px;\n    border-radius: 8px;\n}\n\n#editBtn, #viewBtn{\n    width: 100px;\n    height: 30px;\n}", ""]);
 
 // exports
 
@@ -458,7 +458,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "\n<a [routerLink]=\"['/add']\">Add a quotable author</a>\n\n<h4>We have quotes by:</h4>\n\n<table>\n  <tr>\n    <th>Author</th>\n    <th>Actions available</th>\n  </tr>\n  <tr *ngFor=\"let x of authors\">\n    <td>{{x.name}}</td>\n    <td><button [routerLink]=\"['/quotes', x._id]\">View quotes</button><button (click)= \"editAuthor(x._id)\">Edit</button></td>\n  </tr>\n</table>\n\n\n\n<!-- <td><button [routerLink]=\"['/edit', x._id]\">Edit</button> <button (click)= \"deleteAuthor(x._id)\">Delete</button></td> -->"
+module.exports = "\n<a [routerLink]=\"['/add']\">Add a quotable author</a>\n\n<h3>We have quotes by:</h3>\n\n<table>\n  <tr id=\"header\">\n    <th>Author</th>\n    <th>Actions available</th>\n  </tr>\n  <tr *ngFor=\"let x of authors\">\n    <td id=\"names\">{{x.name}}</td>\n    <td><button id=\"viewBtn\" [routerLink]=\"['/quotes', x._id]\">View quotes</button><button id=\"editBtn\" [routerLink]=\"['/edit', x._id]\">Edit</button></td>\n  </tr>\n</table>\n\n"
 
 /***/ }),
 
@@ -507,12 +507,10 @@ var HomeComponent = /** @class */ (function () {
             if (responseData.error) {
                 var messageString = responseData.error.message;
                 _this.messageService.add("Delete error: " + messageString);
-                // this._route.navigate(['/home']);
             }
             else {
                 _this.messageService.add("Author deleted.");
                 _this.getAuthorsFromService();
-                // this._route.navigate(['/home']);
             }
         });
     };
@@ -575,6 +573,9 @@ var HttpService = /** @class */ (function () {
     };
     HttpService.prototype.decrementVote = function (authorId, quoteIdObj) {
         return this._http.put("/api/write/" + authorId + "/votedown", quoteIdObj);
+    };
+    HttpService.prototype.deleteQuote = function (authorId, quoteIdObj) {
+        return this._http.put("/api/write/" + authorId + "/delete", quoteIdObj);
     };
     HttpService = __decorate([
         core_1.Injectable(),
@@ -695,7 +696,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "table, th, td {\n    border: 1px solid black;\n    border-collapse: collapse;\n    text-align: center;\n }\n \n #quote_link{\n     margin-left: 30px;\n }", ""]);
+exports.push([module.i, "table, th, td {\n    border: 1px solid black;\n    border-collapse: collapse;\n    text-align: center;\n }\n\n h3{\n    color: blue;\n}\n\n #quote_link{\n     margin-left: 30px;\n }\n\n #downBtn, #delBtn{\n     margin-left: 10px;\n }\n\n #downBtn, #delBtn, #upBtn{\n     width: 100px;\n     height: 30px;\n     border-radius: 8px;\n }\n\n th, td{\n     /* height: 35px; */\n     padding: 5px;\n }\n\n #header{\n     background-color: lightgray;\n }", ""]);
 
 // exports
 
@@ -708,7 +709,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/quotes/quotes.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<a [routerLink]=\"['/']\">Home</a>\n<a id=\"quote_link\" [routerLink]=\"['/write/',authorId]\">Add a quote</a>\n<h4>Quotes by {{authorName}}:</h4>\n\n<table>\n  <tr>\n    <th>Quote</th>\n    <th>Votes</th>\n    <th>Actions available</th>\n  </tr>\n  <tr *ngFor=\"let x of authorQuotes\">\n    <td>\"{{x.content}}\"</td>\n    <td>{{x.votes}}</td>\n    <td>\n      <button (click)=\"upVote(x._id)\">Vote up</button>\n      <button (click)=\"downVote(x._id)\">Vote down</button>\n      <button (click)= \"deleteQuote(x._id)\">Delete</button>\n    </td>\n  </tr>\n</table>"
+module.exports = "<a [routerLink]=\"['/']\">Home</a>\n<a id=\"quote_link\" [routerLink]=\"['/write/',authorId]\">Add a quote</a>\n<h3>Quotes by {{authorName}}:</h3>\n\n<table>\n  <tr id=\"header\">\n    <th>Quote</th>\n    <th>Votes</th>\n    <th>Actions available</th>\n  </tr>\n  <tr *ngFor=\"let x of authorQuotes\">\n    <td>\"{{x.content}}\"</td>\n    <td>{{x.votes}}</td>\n    <td>\n      <button id=\"upBtn\" (click)=\"upVote(x._id)\">Vote up</button>\n      <button id=\"downBtn\" (click)=\"downVote(x._id)\">Vote down</button>\n      <button id=\"delBtn\" (click)= \"deleteQuote(x._id)\">Delete</button>\n    </td>\n  </tr>\n</table>"
 
 /***/ }),
 
@@ -739,6 +740,9 @@ var QuotesComponent = /** @class */ (function () {
         this.authorQuotes = [];
     }
     QuotesComponent.prototype.ngOnInit = function () {
+        this.getData();
+    };
+    QuotesComponent.prototype.getData = function () {
         var _this = this;
         this._route.paramMap.subscribe(function (params) {
             _this._httpService.getSingleAuthor(params.get('id'))
@@ -754,23 +758,49 @@ var QuotesComponent = /** @class */ (function () {
         var _this = this;
         console.log("Clicked UpVote");
         console.log(id);
-        this._httpService.incrementVote(this.authorId, { quoteID: id })
+        var quoteIdObj = { quoteId: id };
+        this._httpService.incrementVote(this.authorId, quoteIdObj)
             .subscribe(function (responseData) {
             if (responseData.error) {
                 _this.errorMessage = responseData.error.message;
             }
             else {
-                console.log("VOTED?");
+                console.log("VOTED!");
+                _this.getData();
             }
         });
     };
     QuotesComponent.prototype.downVote = function (id) {
+        var _this = this;
         console.log("Clicked DownVote");
         console.log(id);
+        var quoteIdObj = { quoteId: id };
+        this._httpService.decrementVote(this.authorId, quoteIdObj)
+            .subscribe(function (responseData) {
+            if (responseData.error) {
+                _this.errorMessage = responseData.error.message;
+            }
+            else {
+                console.log("Down VOTED!");
+                _this.getData();
+            }
+        });
     };
     QuotesComponent.prototype.deleteQuote = function (id) {
+        var _this = this;
         console.log("Clicked Delete Quote");
         console.log(id);
+        var quoteIdObj = { quoteId: id };
+        this._httpService.deleteQuote(this.authorId, quoteIdObj)
+            .subscribe(function (responseData) {
+            if (responseData.error) {
+                _this.errorMessage = responseData.error.message;
+            }
+            else {
+                console.log("Deleted!");
+                _this.getData();
+            }
+        });
     };
     QuotesComponent = __decorate([
         core_1.Component({

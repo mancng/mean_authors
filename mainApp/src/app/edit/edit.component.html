@@ -4,7 +4,7 @@
   <form (submit)="onSubmit()">
     <span>Name:</span><br>
     <input id="textField" type="text" name="authorName" [(ngModel)]="authorName" /><br>
-    <a id="cancelBtn" [routerLink]="['/home']">Cancel</a>
+    <a id="cancelBtn" [routerLink]="['/']">Cancel</a>
     <input type="submit" value="Submit"/>
   </form>
   <p id="ptag" *ngIf="errorMessage != undefined">

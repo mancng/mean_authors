@@ -6,7 +6,6 @@ export class HttpService {
 
   constructor(private _http: HttpClient) { }
 
-
   getAuthors(){
     return this._http.get('/api/authors');
   }
@@ -39,6 +38,9 @@ export class HttpService {
     return this._http.put(`/api/write/${authorId}/votedown`, quoteIdObj);
   }
 
+  deleteQuote(authorId, quoteIdObj){
+    return this._http.put(`/api/write/${authorId}/delete`, quoteIdObj)
+  }
 
 
 }

@@ -1,9 +1,9 @@
 <a [routerLink]="['/']">Home</a>
 <a id="quote_link" [routerLink]="['/write/',authorId]">Add a quote</a>
-<h4>Quotes by {{authorName}}:</h4>
+<h3>Quotes by {{authorName}}:</h3>
 
 <table>
-  <tr>
+  <tr id="header">
     <th>Quote</th>
     <th>Votes</th>
     <th>Actions available</th>
@@ -12,9 +12,9 @@
     <td>"{{x.content}}"</td>
     <td>{{x.votes}}</td>
     <td>
-      <button (click)="upVote(x._id)">Vote up</button>
-      <button (click)="downVote(x._id)">Vote down</button>
-      <button (click)= "deleteQuote(x._id)">Delete</button>
+      <button id="upBtn" (click)="upVote(x._id)">Vote up</button>
+      <button id="downBtn" (click)="downVote(x._id)">Vote down</button>
+      <button id="delBtn" (click)= "deleteQuote(x._id)">Delete</button>
     </td>
   </tr>
 </table>
